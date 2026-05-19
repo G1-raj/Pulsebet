@@ -1,0 +1,55 @@
+services:
+
+  backend:
+    build: .
+    container_name: pulsebet_backend
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - .:/app
+
+    env_file:
+      - .env
+
+    depends_on:
+      - postgres
+      - redis
+
+    restart: always
+
+  postgres:
+    image: postgres:16
+
+    container_name: pulsebet_postgres
+
+    ports:
+      - "5440:5440"
+
+    environment:
+      POSTGRES_DB: pulsebet
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    restart: always
+
+  redis:
+    image: redis:7
+
+    container_name: pulsebet_redis
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis_data:/data
+
+    restart: always
+
+volumes:
+  postgres_data:
+  redis_data:
